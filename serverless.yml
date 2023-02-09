@@ -6,19 +6,32 @@ provider:
   runtime: nodejs14.x
   region: us-east-1
   stage: prod
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: "arn:aws:dynamodb:us-east-1:551390742149:table/Notes"
+
+  environment:
+    noteTable: Notes
 
 functions:
-  hello:
-    handler: handler.hello
+  createNote:
+    handler: src/functions/createNote/handler.create
     events:
       - httpApi:
-          path: /
-          method: get
+          path: /createNote
+          method: post
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
   - serverless-dotenv-plugin
-
-package:
-  individually: true
