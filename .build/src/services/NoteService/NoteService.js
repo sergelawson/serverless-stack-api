@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
-var ulid_1 = require("ulid");
 var NoteService = /** @class */ (function () {
     function NoteService(dynamodbDoc) {
         this.dynamodbDoc = dynamodbDoc;
@@ -45,20 +44,13 @@ var NoteService = /** @class */ (function () {
     }
     NoteService.prototype.createNote = function (note) {
         return __awaiter(this, void 0, void 0, function () {
-            var noteId, input;
+            var input;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        noteId = (0, ulid_1.ulid)();
                         input = {
                             TableName: this.TableName,
-                            Item: {
-                                userId: note.userId,
-                                noteId: noteId,
-                                content: note.content,
-                                attachment: note.attachment,
-                                createdAt: new Date().toISOString(),
-                            },
+                            Item: note,
                         };
                         return [4 /*yield*/, this.dynamodbDoc.send(new lib_dynamodb_1.PutCommand(input))];
                     case 1:

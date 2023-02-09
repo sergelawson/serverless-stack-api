@@ -15,11 +15,25 @@ const create = handler(
         }),
       };
     }
-    const { note } = JSON.parse(event.body);
+    if (!event.requestContext.identity.cognitoIdentityId) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({
+          message: "Please send user",
+        }),
+      };
+    }
+    const note = JSON.parse(event.body);
 
-    console.log(note);
+    const noteId = ulid();
 
-    const noteData = await noteService.createNote(note);
+    const noteData = await noteService.createNote({
+      userId: event.requestContext.identity.cognitoIdentityId,
+      noteId: noteId,
+      content: note.content,
+      attachment: note.attachment,
+      createdAt: new Date().toISOString(),
+    });
     return {
       statusCode: 200,
       body: JSON.stringify({

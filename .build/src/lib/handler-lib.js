@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -73,4 +84,11 @@ function handler(lamda) {
     };
 }
 exports.default = handler;
+var parseBody = function (event) {
+    if (!event.body) {
+        return __assign({}, event);
+    }
+    var parsedBody = JSON.parse(event.body);
+    return __assign(__assign({}, event), { body: parsedBody });
+};
 //# sourceMappingURL=handler-lib.js.map

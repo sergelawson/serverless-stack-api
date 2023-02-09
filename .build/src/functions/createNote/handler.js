@@ -37,10 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
+var ulid_1 = require("ulid");
 var NoteService_1 = require("../../services/NoteService");
 var handler_lib_1 = require("../../lib/handler-lib");
 var create = (0, handler_lib_1.default)(function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var note, noteData;
+    var note, noteId, noteData;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -52,9 +53,23 @@ var create = (0, handler_lib_1.default)(function (event) { return __awaiter(void
                             }),
                         }];
                 }
-                note = JSON.parse(event.body).note;
-                console.log(note);
-                return [4 /*yield*/, NoteService_1.default.createNote(note)];
+                if (!event.requestContext.identity.cognitoIdentityId) {
+                    return [2 /*return*/, {
+                            statusCode: 401,
+                            body: JSON.stringify({
+                                message: "Please send user",
+                            }),
+                        }];
+                }
+                note = JSON.parse(event.body);
+                noteId = (0, ulid_1.ulid)();
+                return [4 /*yield*/, NoteService_1.default.createNote({
+                        userId: event.requestContext.identity.cognitoIdentityId,
+                        noteId: noteId,
+                        content: note.content,
+                        attachment: note.attachment,
+                        createdAt: new Date().toISOString(),
+                    })];
             case 1:
                 noteData = _a.sent();
                 return [2 /*return*/, {

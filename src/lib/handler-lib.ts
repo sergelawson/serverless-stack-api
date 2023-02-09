@@ -33,3 +33,14 @@ export default function handler(lamda: HandleType) {
     }
   };
 }
+
+const parseBody = (event: APIGatewayProxyEvent) => {
+  if (!event.body) {
+    return { ...event };
+  }
+  const parsedBody = JSON.parse(event.body);
+  return {
+    ...event,
+    body: parsedBody,
+  };
+};
