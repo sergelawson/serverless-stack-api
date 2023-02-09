@@ -36,35 +36,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = void 0;
-var NoteService_1 = require("../../services/NoteService");
-var handler_lib_1 = require("../../lib/handler-lib");
-var create = (0, handler_lib_1.default)(function (event) { return __awaiter(void 0, void 0, void 0, function () {
-    var note, noteData;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                if (!event.body) {
-                    return [2 /*return*/, {
-                            statusCode: 400,
-                            body: JSON.stringify({
-                                message: "Please send valid note",
-                            }),
-                        }];
+function handler(lamda) {
+    return function (event, context) {
+        return __awaiter(this, void 0, void 0, function () {
+            var headers, response, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        headers = {
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Credentials": true,
+                        };
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, lamda(event, context)];
+                    case 2:
+                        response = _a.sent();
+                        return [2 /*return*/, {
+                                statusCode: response.statusCode,
+                                headers: headers,
+                                body: JSON.stringify(response.body),
+                            }];
+                    case 3:
+                        error_1 = _a.sent();
+                        console.log(error_1);
+                        return [2 /*return*/, {
+                                statusCode: 500,
+                                headers: headers,
+                                body: JSON.stringify({ message: error_1.message }),
+                            }];
+                    case 4: return [2 /*return*/];
                 }
-                note = JSON.parse(event.body).note;
-                console.log(note);
-                return [4 /*yield*/, NoteService_1.default.createNote(note)];
-            case 1:
-                noteData = _a.sent();
-                return [2 /*return*/, {
-                        statusCode: 200,
-                        body: JSON.stringify({
-                            note: noteData,
-                        }),
-                    }];
-        }
-    });
-}); });
-exports.create = create;
-//# sourceMappingURL=handler.js.map
+            });
+        });
+    };
+}
+exports.default = handler;
+//# sourceMappingURL=handler-lib.js.map
