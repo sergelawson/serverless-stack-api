@@ -28,8 +28,32 @@ functions:
     handler: src/functions/createNote/handler.create
     events:
       - httpApi:
-          path: /createNote
+          path: /note
           method: post
+  updateNote:
+    handler: src/functions/updateNote/handler.update
+    events:
+      - httpApi:
+          path: /note/{id}
+          method: put
+  getNote:
+    handler: src/functions/getNote/handler.get
+    events:
+      - httpApi:
+          path: /note/{id}
+          method: get
+  getAllNotes:
+    handler: src/functions/getAllNotes/handler.getAll
+    events:
+      - httpApi:
+          path: /notes
+          method: get
+  deleteNote:
+    handler: src/functions/deleteNote/handler.deleteNote
+    events:
+      - httpApi:
+          path: /note/{id}
+          method: delete
 
 plugins:
   - serverless-plugin-typescript

@@ -1,5 +1,8 @@
-import { APIGatewayProxyResult, Context } from "aws-lambda";
-import { APIGatewayProxyEvent } from "aws-lambda";
+import {
+  APIGatewayProxyResult,
+  APIGatewayProxyEvent,
+  Context,
+} from "aws-lambda";
 
 type HandleType = (
   event: APIGatewayProxyEvent,

@@ -52,12 +52,12 @@ class NoteService {
     return note.Item as Note;
   }
 
-  async updateNote(note: Note): Promise<any> {
+  async updateNote(userId: string, noteId: string, note: Note): Promise<any> {
     const input: UpdateCommandInput = {
       TableName: this.TableName,
       Key: {
-        userId: note.userId,
-        noteId: note.noteId,
+        userId: userId,
+        noteId: noteId,
       },
       UpdateExpression: "SET content = :content, attachment = :attachment",
       ExpressionAttributeValues: {

@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var lib_dynamodb_1 = require("@aws-sdk/lib-dynamodb");
 var NoteService = /** @class */ (function () {
     function NoteService(dynamodbDoc) {
         this.dynamodbDoc = dynamodbDoc;
@@ -52,10 +51,100 @@ var NoteService = /** @class */ (function () {
                             TableName: this.TableName,
                             Item: note,
                         };
-                        return [4 /*yield*/, this.dynamodbDoc.send(new lib_dynamodb_1.PutCommand(input))];
+                        return [4 /*yield*/, this.dynamodbDoc.put(input)];
                     case 1:
                         _a.sent();
                         return [2 /*return*/, note];
+                }
+            });
+        });
+    };
+    NoteService.prototype.getAllNote = function (userId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var input, listNotes;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        input = {
+                            TableName: this.TableName,
+                            KeyConditionExpression: "userId = :userId",
+                            ExpressionAttributeValues: {
+                                ":userId": userId,
+                            },
+                        };
+                        return [4 /*yield*/, this.dynamodbDoc.query(input)];
+                    case 1:
+                        listNotes = _a.sent();
+                        return [2 /*return*/, listNotes.Items];
+                }
+            });
+        });
+    };
+    NoteService.prototype.getNote = function (userId, noteId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var input, note;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        input = {
+                            TableName: this.TableName,
+                            Key: {
+                                userId: userId,
+                                noteId: noteId,
+                            },
+                        };
+                        return [4 /*yield*/, this.dynamodbDoc.get(input)];
+                    case 1:
+                        note = _a.sent();
+                        return [2 /*return*/, note.Item];
+                }
+            });
+        });
+    };
+    NoteService.prototype.updateNote = function (userId, noteId, note) {
+        return __awaiter(this, void 0, void 0, function () {
+            var input;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        input = {
+                            TableName: this.TableName,
+                            Key: {
+                                userId: userId,
+                                noteId: noteId,
+                            },
+                            UpdateExpression: "SET content = :content, attachment = :attachment",
+                            ExpressionAttributeValues: {
+                                ":content": note.content,
+                                ":attachment": note.attachment,
+                            },
+                            ReturnValues: "ALL_NEW",
+                        };
+                        return [4 /*yield*/, this.dynamodbDoc.update(input)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, { status: true }];
+                }
+            });
+        });
+    };
+    NoteService.prototype.deleteNote = function (userId, noteId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var input;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        input = {
+                            TableName: this.TableName,
+                            Key: {
+                                userId: userId,
+                                noteId: noteId,
+                            },
+                        };
+                        return [4 /*yield*/, this.dynamodbDoc.delete(input)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, { status: true }];
                 }
             });
         });

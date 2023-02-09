@@ -1,0 +1,11 @@
+{
+  "body": "{\"content\":\"San José world\",\"attachment\":\"jumanji.jpg\"}",
+  "pathParameters": {
+    "id": "01GRVAXN43QY7N90CGRZW7PS5E"
+  },
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1234"
+    }
+  }
+}
