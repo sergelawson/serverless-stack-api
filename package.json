@@ -10,6 +10,7 @@
     "@aws-sdk/lib-dynamodb": "^3.266.1",
     "dotenv": "^16.0.3",
     "serverless-plugin-dotenv": "^1.0.0",
+    "stripe": "^11.10.0",
     "ulid": "^2.3.0"
   },
   "devDependencies": {
