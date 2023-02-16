@@ -1,11 +1,15 @@
 service: note-app-dev
 frameworkVersion: "3"
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs14.x
   region: us-east-1
   stage: prod
+  httpApi:
+    cors: true
   iam:
     role:
       statements:
@@ -22,6 +26,7 @@ provider:
 
   environment:
     noteTable: Notes
+    stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
 functions:
   createNote:
@@ -30,30 +35,48 @@ functions:
       - httpApi:
           path: /note
           method: post
+          authorizer:
+            type: aws_iam
   updateNote:
     handler: src/functions/updateNote/handler.update
     events:
       - httpApi:
           path: /note/{id}
           method: put
+          authorizer:
+            type: aws_iam
   getNote:
     handler: src/functions/getNote/handler.get
     events:
       - httpApi:
           path: /note/{id}
           method: get
+          authorizer:
+            type: aws_iam
   getAllNotes:
     handler: src/functions/getAllNotes/handler.getAll
     events:
       - httpApi:
           path: /notes
           method: get
+          authorizer:
+            type: aws_iam
   deleteNote:
     handler: src/functions/deleteNote/handler.deleteNote
     events:
       - httpApi:
           path: /note/{id}
           method: delete
+          authorizer:
+            type: aws_iam
+  billing:
+    handler: src/functions/billing/handler.main
+    events:
+      - httpApi:
+          path: /billing
+          method: post
+          authorizer:
+            type: aws_iam
 
 plugins:
   - serverless-plugin-typescript
